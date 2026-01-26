@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>mustache.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="mustache-%ED%85%9C%ED%94%8C%EB%A6%BF-%EB%AC%B8%EB%B2%95-%EA%B0%80%EC%9D%B4%EB%93%9C">Mustache 템플릿 문법 가이드</h1>
+<p>Mustache는 로직 없는 템플릿 문법입니다. 모든 태그는 <code>{{</code>와 <code>}}</code>로 감싸서 사용합니다.</p>
+<h2 id="%EA%B8%B0%EB%B3%B8-%EB%AC%B8%EB%B2%95">기본 문법</h2>
+<h3 id="1-%EB%B3%80%EC%88%98-%EC%B6%9C%EB%A0%A5-variables">1. 변수 출력 (Variables)</h3>
+<p>변수 값을 출력합니다.</p>
+<pre class="hljs"><code><div>{{name}}
+</div></code></pre>
+<ul>
+<li>변수가 존재하면 값이 출력됩니다</li>
+<li>변수가 없거나 null이면 아무것도 출력되지 않습니다</li>
+<li>HTML 이스케이프가 자동으로 처리됩니다</li>
+</ul>
+<p><strong>예시:</strong></p>
+<pre class="hljs"><code><div>&lt;h1&gt;{{title}}&lt;/h1&gt;
+&lt;p&gt;가격: {{price}}원&lt;/p&gt;
+</div></code></pre>
+<h3 id="2-html-%EC%9D%B4%EC%8A%A4%EC%BC%80%EC%9D%B4%ED%94%84-%EC%97%86%EC%9D%B4-%EC%B6%9C%EB%A0%A5-unescaped">2. HTML 이스케이프 없이 출력 (Unescaped)</h3>
+<p>HTML 태그를 그대로 출력하려면 <code>{{{</code> 또는 <code>{{&amp;</code>를 사용합니다.</p>
+<pre class="hljs"><code><div>{{{html_content}}}
+{{&amp;html_content}}
+</div></code></pre>
+<p><strong>예시:</strong></p>
+<pre class="hljs"><code><div>&lt;div&gt;{{{description}}}&lt;/div&gt;
+</div></code></pre>
+<h3 id="3-%EC%84%B9%EC%85%98-sections">3. 섹션 (Sections)</h3>
+<p>조건부 렌더링과 반복문에 사용됩니다.</p>
+<h4 id="31-truthy-%EC%84%B9%EC%85%98">3.1. Truthy 섹션</h4>
+<p>변수가 존재하고 truthy 값이면 섹션 내용을 렌더링합니다.</p>
+<pre class="hljs"><code><div>{{#section}}
+  내용
+{{/section}}
+</div></code></pre>
+<p><strong>예시:</strong></p>
+<pre class="hljs"><code><div>{{#user}}
+  &lt;p&gt;사용자: {{name}}&lt;/p&gt;
+{{/user}}
+</div></code></pre>
+<h4 id="32-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EB%B0%98%EB%B3%B5">3.2. 리스트 반복</h4>
+<p>배열이나 리스트를 반복합니다.</p>
+<pre class="hljs"><code><div>{{#items}}
+  &lt;li&gt;{{name}}&lt;/li&gt;
+{{/items}}
+</div></code></pre>
+<p><strong>예시:</strong></p>
+<pre class="hljs"><code><div>{{#models}}
+  &lt;tr&gt;
+    &lt;td&gt;{{id}}&lt;/td&gt;
+    &lt;td&gt;{{name}}&lt;/td&gt;
+  &lt;/tr&gt;
+{{/models}}
+</div></code></pre>
+<h4 id="33-falseempty-%EC%84%B9%EC%85%98-inverted-section">3.3. False/Empty 섹션 (Inverted Section)</h4>
+<p>변수가 없거나 false, 빈 배열이면 섹션 내용을 렌더링합니다.</p>
+<pre class="hljs"><code><div>{{^section}}
+  내용이 없을 때 표시
+{{/section}}
+</div></code></pre>
+<p><strong>예시:</strong></p>
+<pre class="hljs"><code><div>{{^products}}
+  &lt;p&gt;상품이 없습니다.&lt;/p&gt;
+{{/products}}
+</div></code></pre>
+<h3 id="4-%EC%A3%BC%EC%84%9D-comments">4. 주석 (Comments)</h3>
+<p>주석은 렌더링되지 않습니다.</p>
+<pre class="hljs"><code><div>{{! 이것은 주석입니다 }}
+</div></code></pre>
+<p><strong>예시:</strong></p>
+<pre class="hljs"><code><div>{{! 이 부분은 출력되지 않습니다 }}
+&lt;h1&gt;제목&lt;/h1&gt;
+</div></code></pre>
+<h3 id="5-%EB%B6%80%EB%B6%84-%ED%85%9C%ED%94%8C%EB%A6%BF-partials">5. 부분 템플릿 (Partials)</h3>
+<p>다른 템플릿 파일을 포함합니다.</p>
+<pre class="hljs"><code><div>{{&gt; partial_name}}
+</div></code></pre>
+<p><strong>예시:</strong></p>
+<pre class="hljs"><code><div>{{&gt; header}}
+&lt;main&gt;내용&lt;/main&gt;
+{{&gt; footer}}
+</div></code></pre>
+<h3 id="6-%EC%84%A4%EC%A0%95-%EB%B3%80%EA%B2%BD%EC%9E%90-set-delimiter">6. 설정 변경자 (Set Delimiter)</h3>
+<p>구분자를 변경할 수 있습니다 (거의 사용하지 않음).</p>
+<pre class="hljs"><code><div>{{=&lt;% %&gt;=}}
+&lt;%변수%&gt;
+{{={{ }}=}}
+</div></code></pre>
+<h2 id="%EC%8B%A4%EC%A0%9C-%EC%82%AC%EC%9A%A9-%EC%98%88%EC%8B%9C">실제 사용 예시</h2>
+<h3 id="%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EB%B0%98%EB%B3%B5">리스트 반복</h3>
+<pre class="hljs"><code><div>&lt;table&gt;
+  &lt;tr&gt;
+    &lt;th&gt;ID&lt;/th&gt;
+    &lt;th&gt;이름&lt;/th&gt;
+  &lt;/tr&gt;
+  {{#models}}
+  &lt;tr&gt;
+    &lt;td&gt;{{id}}&lt;/td&gt;
+    &lt;td&gt;&lt;a href=&quot;/product/{{id}}&quot;&gt;{{name}}&lt;/a&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  {{/models}}
+&lt;/table&gt;
+</div></code></pre>
+<h3 id="%EC%A1%B0%EA%B1%B4%EB%B6%80-%EB%A0%8C%EB%8D%94%EB%A7%81">조건부 렌더링</h3>
+<pre class="hljs"><code><div>{{#user}}
+  &lt;p&gt;안녕하세요, {{name}}님!&lt;/p&gt;
+{{/user}}
+
+{{^user}}
+  &lt;p&gt;로그인이 필요합니다.&lt;/p&gt;
+{{/user}}
+</div></code></pre>
+<h3 id="%EC%A4%91%EC%B2%A9%EB%90%9C-%EA%B0%9D%EC%B2%B4-%EC%A0%91%EA%B7%BC">중첩된 객체 접근</h3>
+<pre class="hljs"><code><div>{{#product}}
+  &lt;h2&gt;{{name}}&lt;/h2&gt;
+  &lt;p&gt;가격: {{price}}원&lt;/p&gt;
+  &lt;p&gt;재고: {{qty}}개&lt;/p&gt;
+  
+  {{#category}}
+    &lt;p&gt;카테고리: {{name}}&lt;/p&gt;
+  {{/category}}
+{{/product}}
+</div></code></pre>
+<h2 id="%EC%A3%BC%EC%9D%98%EC%82%AC%ED%95%AD">주의사항</h2>
+<ol>
+<li>
+<p><strong>로직 없음</strong>: Mustache는 if/else, for 루프 같은 로직이 없습니다. 데이터를 미리 준비해야 합니다.</p>
+</li>
+<li>
+<p><strong>스페이스 민감</strong>: <code>{{#section}}</code>과 <code>{{/section}}</code> 사이의 들여쓰기와 공백이 그대로 유지됩니다.</p>
+</li>
+<li>
+<p><strong>변수명 규칙</strong>:</p>
+<ul>
+<li>대소문자 구분</li>
+<li>영문, 숫자, 언더스코어(_) 사용 가능</li>
+<li>점(.)으로 중첩 객체 접근 가능</li>
+</ul>
+</li>
+<li>
+<p><strong>HTML 이스케이프</strong>: 기본적으로 HTML 특수문자(<code>&lt;</code>, <code>&gt;</code>, <code>&amp;</code> 등)가 자동으로 이스케이프됩니다.</p>
+</li>
+</ol>
+<h2 id="spring-boot%EC%97%90%EC%84%9C%EC%9D%98-%EC%82%AC%EC%9A%A9">Spring Boot에서의 사용</h2>
+<p>Spring Boot에서 Mustache를 사용할 때:</p>
+<pre class="hljs"><code><div><span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">"/product"</span>)
+<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">list</span><span class="hljs-params">(HttpServletRequest req)</span> </span>{
+    List&lt;Product&gt; models = service.상품목록();
+    req.setAttribute(<span class="hljs-string">"models"</span>, models);
+    <span class="hljs-keyword">return</span> <span class="hljs-string">"list"</span>;  <span class="hljs-comment">// list.mustache 템플릿 사용</span>
+}
+</div></code></pre>
+<p>템플릿에서:</p>
+<pre class="hljs"><code><div>{{#models}}
+  &lt;div&gt;{{name}}&lt;/div&gt;
+{{/models}}
+</div></code></pre>
+<h2 id="%EC%B0%B8%EA%B3%A0-%EC%9E%90%EB%A3%8C">참고 자료</h2>
+<ul>
+<li><a href="https://mustache.github.io/">Mustache 공식 문서</a></li>
+<li><a href="https://mustache.github.io/mustache.5.html">Mustache Manual</a></li>
+</ul>
+
+</body>
+</html>
