@@ -24,7 +24,7 @@ public class BoardRepository {
     // }
 
     public Board findById(int id) {
-        Board board = em.find(Board.class, id);
+        Board board = em.find(Board.class, id);// id값으로 em.find를 통해 찾기
         return board;
     }
 
@@ -35,8 +35,14 @@ public class BoardRepository {
         return list;
     }
 
-    public void save(Board board) {
-        em.persist(board);
+    public void findAll2() {
+        em.createQuery("select b.id, b.title from Board b").getResultList();
+
+    }
+
+    public Board save(Board board) {
+        em.persist(board); // 영속화(영구히 저장하다.)
+        return board;
     }
 
     public void delete(Board board) {
