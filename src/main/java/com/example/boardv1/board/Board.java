@@ -26,7 +26,7 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String title;
-    private String content;
+    private String content; // 255
     @CreationTimestamp
     private Timestamp createdAt; // Timestamp은 SQL로 import 필요
 
