@@ -24,16 +24,15 @@ public class BoardController {
 
     // body : title=title7&content=content7 (x-www-form)
     @PostMapping("/boards/save")
-    public String save(BoardSaveDTO reqDTO) throws IOException {
+    public String save(BoardRequest.SaveOrUpdateDTO reqDTO) throws IOException {
         boardService.게시글쓰기(reqDTO.getTitle(), reqDTO.getContent());
         return "redirect:/";
     }
 
     // body : title=하하하&content=호호호호호
     @PostMapping("/boards/{id}/update")
-    public String update(@PathVariable("id") int id, @RequestParam("title") String title,
-            @RequestParam("content") String content) {
-        boardService.게시글수정(id, title, content);
+    public String update(@PathVariable("id") int id, BoardRequest.SaveOrUpdateDTO reqDTO) {
+        boardService.게시글수정(id, reqDTO.getTitle(), reqDTO.getContent());
         return "redirect:/boards/" + id;
     }
 
