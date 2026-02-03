@@ -1,6 +1,7 @@
 package com.example.boardv1.board;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
@@ -18,30 +19,23 @@ public class BoardRepository {
 
     private final EntityManager em;
 
-    // DI = 의존성 주입(의존하고 있는게 Ioc에 떠있어야함)
+    // DI = 의존성 주입 (의존하고 있는게 IoC에 떠있어야됨)
     // public BoardRepository(EntityManager em) {
     // this.em = em;
     // }
 
-    public Board findById(int id) {
+    public Optional<Board> findById(int id) {
         // select * from board_tb where id = 1;
         // ResultSet rs -> Board 객체 옮기기 (Object Mapping)
         // Board board = new Board();
         // board.id = rs.getInt("id");
-        Board board = em.find(Board.class, id);// id값으로 em.find를 통해 찾기
-        return board;
+        Board board = em.find(Board.class, id);
+        return Optional.ofNullable(board);
     }
 
-    // 파싱 덕분에 코드가 많이 줄어든 상태
     public List<Board> findAll() {
-        Query query = em.createQuery("select b from Board b order by b.id desc", Board.class);
-        List<Board> list = query.getResultList();
-        return list;
-    }
-
-    public void findAll2() {
-        em.createQuery("select b.id, b.title from Board b").getResultList();
-
+        return em.createQuery("select b from Board b order by b.id desc", Board.class)
+                .getResultList();
     }
 
     public Board save(Board board) {

@@ -11,10 +11,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor // object mapping을 hibernate가 할때 디폴트 생성자를 new한다.
-@Data
+// @Data
+@Getter
+@Setter
 @Entity // 엔티티있어야 하이버네이티가 테이블도 생성해주고 ~ 다 해쥼
 @Table(name = "user_tb")
 public class User {
@@ -30,5 +34,11 @@ public class User {
 
     @CreationTimestamp
     private LocalDateTime createdAt; // Insert 할때 시간 해주면 좋음
+
+    @Override
+    public String toString() {
+        return "User [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email
+                + ", createdAt=" + createdAt + "]";
+    }
 
 }

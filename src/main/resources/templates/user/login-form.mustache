@@ -7,15 +7,20 @@
         <div class="card-body">
             <form action="/login" method="post" enctype="application/x-www-form-urlencoded">
                 <div class="mb-3">
-                    <input type="text" class="form-control" placeholder="Enter username" name="username" required>
+                    <input id="username" type="text" class="form-control" placeholder="Enter username" name="username" required>
                 </div>
                 <div class="mb-3">
-                    <input type="password" class="form-control" placeholder="Enter password" name="password" required>
+                    <input id="username" type="password" class="form-control" placeholder="Enter password" name="password" required>
                 </div>
                 <button class="btn btn-secondary form-control">로그인</button>
             </form>
         </div>
     </div>
 </div>
+<script>
+    let username = document.cookie.split("=")[1];
+    let dom = document.querySelector("#username");
+    dom.value = username; // 로그인하면 아이디 안만들어줘도됨. 지금은 쿠키연습용으로 넣은거지만 실무에선 잘 넣지않음.
+</script>
 </body>
 </html>

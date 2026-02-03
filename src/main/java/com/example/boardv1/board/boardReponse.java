@@ -1,5 +1,5 @@
 package com.example.boardv1.board;
 
-public class boardReponse {
+public class BoardReponse {
 
 }
