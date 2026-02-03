@@ -38,7 +38,7 @@ public class Board {
     private String content; // 255
 
     // private Integer userId;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user; // 포린키
 
     @CreationTimestamp
