@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.boardv1.board.BoardResponse.DetailDTO;
 import com.example.boardv1.user.User;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -85,14 +87,22 @@ public class BoardController {
         return "board/update-form";
     }
 
+    // 인증(x), 권한(x)
     @GetMapping("/boards/{id}")
     public String detail(@PathVariable("id") int id, HttpServletRequest req) {
-        // 인증(x). 권한(x)
         User sessionUser = (User) session.getAttribute("sessionUser");
         Integer sessionUserId = sessionUser == null ? null : sessionUser.getId();
-        BoardReponse.DetailDTO dto = boardService.상세보기(id, sessionUserId);
+        DetailDTO dto = boardService.상세보기(id, sessionUserId);
         req.setAttribute("model", dto);
         return "board/detail";
+    }
+
+    @GetMapping("/api/boards/{id}")
+    public @ResponseBody BoardResponse.DetailDTO apiDetail(@PathVariable("id") int id) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        Integer sessionUserId = sessionUser == null ? null : sessionUser.getId();
+        BoardResponse.DetailDTO dto = boardService.상세보기(id, sessionUserId);
+        return dto;
     }
 
     @PostMapping("/boards/{id}/delete")

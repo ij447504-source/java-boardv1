@@ -31,11 +31,11 @@ public class BoardService {
         return board;
     }
 
-    public BoardReponse.DetailDTO 상세보기(int id, Integer sessionUserId) {
+    public BoardResponse.DetailDTO 상세보기(int id, Integer sessionUserId) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없어요"));
 
-        return new BoardReponse.DetailDTO(board, sessionUserId);
+        return new BoardResponse.DetailDTO(board, sessionUserId);
     }// 괄호해서 DTO로 묶은 것 DTO잘하면 프론트가 좋아해영영
 
     @Transactional // update, delete, insert 할때 붙이세요!!

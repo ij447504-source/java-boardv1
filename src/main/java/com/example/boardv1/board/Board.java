@@ -1,10 +1,13 @@
 package com.example.boardv1.board;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.ManyToAny;
 
+import com.example.boardv1.reply.Reply;
 import com.example.boardv1.user.User;
 
 import jakarta.persistence.Column;
@@ -40,6 +43,9 @@ public class Board {
     // private Integer userId;
     @ManyToOne(fetch = FetchType.EAGER)
     private User user; // 포린키
+
+    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
+    private List<Reply> replies = new ArrayList<>();
 
     @CreationTimestamp
     private Timestamp createdAt; // Timestamp은 SQL로 import 필요

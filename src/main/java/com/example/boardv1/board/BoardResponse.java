@@ -1,8 +1,12 @@
 package com.example.boardv1.board;
 
+import java.util.List;
+
+import com.example.boardv1.reply.ReplyResponse;
+
 import lombok.Data;
 
-public class BoardReponse {
+public class BoardResponse {
 
     @Data
     public static class DetailDTO {
@@ -19,13 +23,19 @@ public class BoardReponse {
         private boolean isOwner;
         // 게시글의 주인인가?
 
-        public DetailDTO(Board board, Integer sessionUserId) { // int = 로그인한
+        private List<ReplyResponse.DTO> replies;
+
+        public DetailDTO(Board board, Integer sessionUserId) {
             this.id = board.getId();
             this.userId = board.getUser().getId();
             this.title = board.getTitle();
             this.content = board.getContent();
             this.username = board.getUser().getUsername();
             this.isOwner = board.getUser().getId() == sessionUserId;
+            this.replies = board.getReplies().stream() // 타입맞추기
+                    .map(reply -> new ReplyResponse.DTO(reply, sessionUserId))
+                    .toList();
+
         }
 
     }
