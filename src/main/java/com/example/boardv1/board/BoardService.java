@@ -5,7 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.boardv1._core.errors.ex.Exception403;
+import com.example.boardv1._core.errors.ex.Exception404;
 import com.example.boardv1.board.BoardRequest.SaveOrUpdateDTO;
+import com.example.boardv1.reply.Reply;
 import com.example.boardv1.user.User;
 
 import lombok.RequiredArgsConstructor;
@@ -23,29 +26,29 @@ public class BoardService {
 
     public Board 수정폼게시글정보(int id, int sessionUserId) {
         Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없어요"));
+                .orElseThrow(() -> new Exception404("게시글을 찾을 수 없어요(수정폼게시글정보보)"));
 
         if (sessionUserId != board.getUser().getId())
-            throw new RuntimeException("삭제할 권한이 없습니다.");
+            throw new Exception403("삭제할 권한이 없습니다.");
 
         return board;
     }
 
     public BoardResponse.DetailDTO 상세보기(int id, Integer sessionUserId) {
         Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없어요"));
+                .orElseThrow(() -> new Exception404("게시글을 찾을 수 없어요(상세보기)"));
 
         return new BoardResponse.DetailDTO(board, sessionUserId);
-    }// 괄호해서 DTO로 묶은 것 DTO잘하면 프론트가 좋아해영영
+    }// 괄호해서 DTO로 묶은 것 DTO잘하면 프론트가 좋아해영
 
     @Transactional // update, delete, insert 할때 붙이세요!!
     public void 게시글수정(int id, String title, String content, int sessionUserId) {
 
         Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("수정할 게시글을 찾을 수 없어요"));
+                .orElseThrow(() -> new Exception404("게시글을 찾을 수 없어요(게시글수정정)"));
 
         if (sessionUserId != board.getUser().getId())
-            throw new RuntimeException("수정할 권한이 없습니다.");
+            throw new Exception403("수정할 권한이 없습니다.");
 
         // 권한 있는 경우 내용 수정
         board.setTitle(title);
@@ -74,12 +77,17 @@ public class BoardService {
     public void 게시글삭제(int id, int sessionUserId) {
         // 영속화
         Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("삭제할 게시글을 찾을 수 없어요"));
+                .orElseThrow(() -> new Exception404("삭제할 게시글을 찾을 수 없어요"));
 
         if (sessionUserId != board.getUser().getId())
-            throw new RuntimeException("삭제할 권한이 없습니다.");
+            throw new Exception403("삭제할 권한이 없습니다.");
+
+        board.getReplies().forEach(r -> {
+            r.setBoard(null);
+        });
 
         boardRepository.delete(board);
+
     }
 
 }

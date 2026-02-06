@@ -4,6 +4,7 @@
 
     <!-- 수정삭제버튼 -->
     {{#model.isOwner}}
+    
     <div class="d-flex justify-content-end">
         <a href="/boards/{{model.id}}/update-form" class="btn btn-secondary me-1">수정</a>
         <form action = "/boards/{{model.id}}/delete" method="post">
@@ -31,9 +32,14 @@
     <!-- 댓글 -->
     <div class="card mt-3">
         <!-- 댓글등록 -->
+        
         <div class="card-body">
             <form action="/replies/save" method="post">
-                <textarea class="form-control" rows="2" name="comment"></textarea>
+                {{!insert 정보 (comment, boardId, userId)}}
+                {{!boardID=5&comment = 댓글5 }}
+                
+                <input type = "hidden" name="boardId" value="{{model.id}}"/>
+                <textarea class="form-control" rows="2" name="comment" id="comment"></textarea>
                 <div class="d-flex justify-content-end">
                 <button class="btn btn-secondary mt-1">                        
                         댓글등록    
@@ -57,7 +63,7 @@
                     </div>
 
                     {{#isReplyOwner}}
-                    <form action="/replies/{{id}}/delete" method="post">
+                    <form action="/replies/{{id}}/delete?boardId={{model.id}}" method="post">
                         <button class="btn">🗑</button>
                     </form>
                     {{/isReplyOwner}}
@@ -67,6 +73,18 @@
         </div>
     </div>
 </div>
+<script>
+    // 1. querySelector로 id가 comment인 textarea 선택
+    const commentTextarea = document.querySelector('#comment');
 
+    // 2. textarea 클릭 시 이벤트 리스너
+    commentTextarea.addEventListener('click', function() {
+        // 3. 알림창으로 로그인 안내
+        {{^sessionUser}}
+            alert('로그인하세요');
+            location.href ="/login-form";
+        {{/sessionUser}}    
+    });
+</script>
 </body>
 </html>

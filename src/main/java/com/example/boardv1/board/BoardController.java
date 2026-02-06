@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.boardv1._core.errors.ex.Exception401;
+import com.example.boardv1._core.errors.ex.Exception500;
 import com.example.boardv1.board.BoardResponse.DetailDTO;
 import com.example.boardv1.user.User;
 
@@ -37,7 +39,7 @@ public class BoardController {
         // id 정보가 없는데 User 정보를 쓰는 것이 맞나? title과 content를 사용해야 하는 것이 아닌가?
         User sessionUser = (User) session.getAttribute("sessionUser");
         if (sessionUser == null)
-            throw new RuntimeException("인증되지 않았습니다.");
+            throw new Exception401("인증되지 않았습니다.");
 
         boardService.게시글쓰기(reqDTO.getTitle(), reqDTO.getContent(), sessionUser);
         return "redirect:/";
@@ -50,7 +52,7 @@ public class BoardController {
 
         User sessionUser = (User) session.getAttribute("sessionUser");
         if (sessionUser == null)
-            throw new RuntimeException("인증되지 않았습니다.");
+            throw new Exception401("인증되지 않았습니다.");
 
         boardService.게시글수정(id, reqDTO.getTitle(), reqDTO.getContent(), sessionUser.getId());
         return "redirect:/boards/" + id;
@@ -70,7 +72,7 @@ public class BoardController {
         // 인증(v). 권한(x)
         User sessionUser = (User) session.getAttribute("sessionUser");
         if (sessionUser == null)
-            throw new RuntimeException("인증되지 않았습니다.");
+            throw new Exception401("인증되지 않았습니다.");
 
         return "board/save-form";
     }
@@ -80,7 +82,7 @@ public class BoardController {
         // 인증(v). 권한(v)
         User sessionUser = (User) session.getAttribute("sessionUser");
         if (sessionUser == null) {
-            throw new RuntimeException("update-form : 인증되지 않았습니다. 로그인 후 이용해 주세요.");
+            throw new Exception401("update-form : 인증되지 않았습니다. 로그인 후 이용해 주세요.");
         }
         Board board = boardService.수정폼게시글정보(id, sessionUser.getId());
         req.setAttribute("model", board);
@@ -110,9 +112,14 @@ public class BoardController {
         // 인증(v). 권한(v)
         User sessionUser = (User) session.getAttribute("sessionUser");
         if (sessionUser == null)
-            throw new RuntimeException("인증되지 않았습니다.");
+            throw new Exception401("인증되지 않았습니다.");
 
-        boardService.게시글삭제(id, sessionUser.getId());
+        try {
+            boardService.게시글삭제(id, sessionUser.getId());
+        } catch (Exception e) {
+            throw new Exception500("댓글이 있는 글을 삭제할 수 없습니다.");
+        }
+
         return "redirect:/";
     }
 

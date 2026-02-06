@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Table(name = "reply_tb")
-public class Reply {
+public class Reply { // 리플라이 만들려면 5개필요요
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
