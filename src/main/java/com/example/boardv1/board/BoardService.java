@@ -75,7 +75,7 @@ public class BoardService {
 
     @Transactional
     public void 게시글삭제(int id, int sessionUserId) {
-        // 영속화
+        // 영속화!!
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new Exception404("삭제할 게시글을 찾을 수 없어요"));
 
